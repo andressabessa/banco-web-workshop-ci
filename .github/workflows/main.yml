@@ -3,7 +3,6 @@ name: 'Banco Web - CI'
 on:
   workflow_dispatch:
 
-
 jobs: 
   tests:
     runs-on: ubuntu-latest
@@ -16,15 +15,17 @@ jobs:
       - name: Checkout do repositório
         uses: actions/checkout@v4
 
-      -name: Instalar dependências
-       run: npm install
+      - name: Instalar dependências
+        run: npm install
 
-      -name: Iniciar o servidor de mocks
-       run: npm run mock-server
+      - name: Iniciar o servidor de mocks
+        run: npm run mock-server &
 
-      -name: Iniciar o servidor da aplicação
-       run: npm run server
+      - name: Iniciar o servidor da aplicação
+        run: npm run server &
 
-      -name: Executar os testes
-       run: npx cypress run
-        
+      - name: Aguardar servidores iniciarem
+        run: sleep 10
+
+      - name: Executar os testes
+        run: npx cypress run
